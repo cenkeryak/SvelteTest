@@ -30,76 +30,47 @@
         return;
       }
 
-      // Define a user survey schema with sample questions
+      // Define the survey schema with sample questions
       const userSchema = {
-        title: 'User Survey', // Overall survey title
+        title: 'Customer Feedback Survey',
+        description: 'Please answer the following questions.',
         type: 'object',
         properties: {
-          title: { 
-            type: 'string', 
-            title: 'Survey Title', 
-            default: 'Customer Feedback Survey', 
-            readOnly: true 
+          name: {
+            type: 'string',
+            title: 'What is your name?',
           },
-          description: { 
-            type: 'string', 
-            title: 'Survey Description', 
-            default: 'Please answer the following questions honestly.', 
-            readOnly: true 
+          age: {
+            type: 'integer',
+            title: 'How old are you?',
           },
-          questions: {
-            type: 'array',
-            title: '',
-            items: {
-              type: 'object',
-              properties: {
-                question: { 
-                  type: 'string', 
-                  title: '', 
-                  default: '', 
-                  readOnly: true 
-                },
-                answer: { 
-                  type: 'string', 
-                  title: 'Answer', 
-                  options: { placeholder: "Enter your answer here..." }
-                }
-              }
-            },
-            options: {
-              disable_array_reorder: true,
-              disable_array_delete_last: true,
-              disable_array_delete_all: true,
-              disable_array_add: true
-            }
+          favorite_food: {
+            type: 'string',
+            title: 'What is your favorite food?',
+          },
+          city: {
+            type: 'string',
+            title: 'Which city do you live in?',
           }
-        }
+        },
+        required: ['name', 'age', 'favorite_food', 'city']
       };
 
-      // Sample questions defined in the schema
-      userSchema.properties.questions.items.properties.question.default = [
-        { question: 'What is your name?' },
-        { question: 'How old are you?' },
-        { question: 'What is your favorite food?' },
-        { question: 'What city do you live in?' }
-      ];
-
-      // Options to initialize JSON Editor in user mode with tailored styling
+      // Options for JSONEditor
       const options = {
         schema: userSchema,
         theme: 'tailwind',
-        disable_edit_json: true,       // Disables JSON editor view
-        disable_properties: true,      // Disables adding new properties
-        disable_array_reorder: true,   // Disables reordering array items
-        array_controls: false,         // Disables add/remove controls for arrays
-        iconlib: null,                 // Hides icon controls
-        show_errors: 'always'          // Always show error messages for required fields
+        disable_edit_json: true,
+        disable_properties: true,
+        disable_collapse: true, // Removes the collapse/expand button
+        show_errors: 'interaction', // Shows errors only on interaction
+        form_name_root: 'SurveyForm'
       };
 
-      // Initialize the JSON Editor in user mode
-      const editor = new JSONEditor(element, options);
+      // Initialize JSON Editor in user mode
+      const editor = new JSONEditor(document.getElementById('editor_holder'), options);
 
-      // Apply additional styling for a user-friendly survey layout
+      // Additional styling to enhance the form look
       document.getElementById('editor_holder').classList.add(
         'p-6', 
         'bg-white', 
@@ -110,42 +81,57 @@
         'space-y-4'
       );
 
-      // Define CSS for each question item to resemble a typical form input
+      // Styling to remove default styling and create a user-friendly layout
       const styleTag = document.createElement("style");
       styleTag.textContent = `
-        .je-question .je-object__title {
-          font-size: 1.2rem;
+        .je-object__title {
+          font-size: 1.5rem;
           font-weight: bold;
           color: #374151;
-        }
-        .je-question .je-object__description {
-          font-size: 1rem;
-          color: #6b7280;
           margin-bottom: 1rem;
         }
-        .je-question .je-array__controls, 
-        .je-question .je-array__add, 
-        .je-question .je-array__delete {
-          display: none !important;
+        .je-object__description {
+          font-size: 1.1rem;
+          color: #6b7280;
+          margin-bottom: 1.5rem;
         }
-        .je-question .form-control {
+        .form-control {
           margin-top: 1rem;
-          padding: 0.5rem;
+          padding: 0.75rem;
           font-size: 1rem;
           border-radius: 0.375rem;
           border: 1px solid #d1d5db;
           width: 100%;
+          box-sizing: border-box;
         }
-        .je-question .form-control:focus {
+        .form-control:focus {
           outline: none;
           border-color: #2563eb;
-          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
         }
-        .je-question .je-field, .je-question .je-property {
+        .je-required {
+          color: #dc2626; /* Red for required labels */
+        }
+        .je-root > .je-object__property, .je-root > .je-object__property--row {
+          border-bottom: 1px solid #e5e7eb;
+          padding: 0.5rem 0;
+        }
+        .je-submit {
+          padding: 0.75rem 1.5rem;
+          background-color: #3b82f6;
+          color: #fff;
+          font-weight: bold;
+          border-radius: 0.375rem;
+          border: none;
+          cursor: pointer;
           margin-top: 1rem;
+        }
+        .je-submit:hover {
+          background-color: #2563eb;
         }
       `;
       document.head.appendChild(styleTag);
+
 
 
 
