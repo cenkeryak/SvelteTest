@@ -59,11 +59,7 @@
             }
           }
 
-        },
-        disable_collapse: true,
-        disable_edit_json: true,
-        disable_properties: true,
-        readonly: true,
+        }
       };
 
       // Initialize JSON Editor
